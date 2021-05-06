@@ -12,7 +12,7 @@ interface Character {
 const App = () => {
     const [characters, setCharacters] = useState<Array<Character>>([]);
     useEffect(() => {
-        fetchJSON({ url: 'http://localhost:3001/character/all' })
+        fetchJSON({ url: '/character/all' })
             .then((result) => {
                 setCharacters(result.body);
             })

@@ -12,6 +12,7 @@ const Characters = ({characters}: CharactersProps) => {
             {
                 characters?.map(character => <Character character={character} key={character.name + character.age} />)
             }
+            <Character />
         </div>
     );
 };
