@@ -3,18 +3,15 @@ import { Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import { fetchJSON } from './utils';
 import Characters from './character/Characters';
-
-interface Character {
-    name: string;
-    age: number;
-}
+import Locations from './location/Locations';
+import { LocationInterface } from './location/LocationView';
 
 const App = () => {
-    const [characters, setCharacters] = useState<Array<Character>>([]);
+    const [locations, setLocations] = useState<Array<LocationInterface>>([]);
     useEffect(() => {
-        fetchJSON({ url: '/character/all' })
+        fetchJSON({ url: '/location/all' })
             .then((result) => {
-                setCharacters(result.body);
+                setLocations(result.body);
             })
             .catch((e) => console.log(e + ''));
     }, []);
@@ -23,17 +20,28 @@ const App = () => {
             <header className="App-header">
                 <ul className="App-linkContainer">
                     <li>
-                        <Link to="/" className="App-link">Home</Link>
+                        <Link to="/" className="App-link">
+                            Home
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/characters" className="App-link">Characters</Link>
+                        <Link to="/characters" className="App-link">
+                            Characters
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/locations" className="App-link">
+                            Locations
+                        </Link>
                     </li>
                 </ul>
             </header>
             <Switch>
                 <Route path="/characters">
-                    <Characters characters={characters}/>
-
+                    <Characters />
+                </Route>
+                <Route path="/locations">
+                    <Locations locations={locations} />
                 </Route>
                 <Route path="/">
                     <h2>Main page</h2>
