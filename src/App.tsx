@@ -1,20 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import { fetchJSON } from './utils';
 import Characters from './character/Characters';
 import Locations from './location/Locations';
-import { LocationInterface } from './location/LocationView';
 
 const App = () => {
-    const [locations, setLocations] = useState<Array<LocationInterface>>([]);
-    useEffect(() => {
-        fetchJSON({ url: '/location/all' })
-            .then((result) => {
-                setLocations(result.body);
-            })
-            .catch((e) => console.log(e + ''));
-    }, []);
     return (
         <div className="App">
             <header className="App-header">
@@ -41,7 +31,7 @@ const App = () => {
                     <Characters />
                 </Route>
                 <Route path="/locations">
-                    <Locations locations={locations} />
+                    <Locations />
                 </Route>
                 <Route path="/">
                     <h2>Main page</h2>
