@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import Character, { CharacterInterface } from './Character';
 import './Characters.css';
-import { AppDispatch, RootState } from '../store';
-import { getCharacters } from '../actions/CharacterActions';
+import { RootState } from '../store';
+import { getCharacters } from './CharacterActions';
 
 //https://redux.js.org/usage/usage-with-typescript
 const mapStateToProps = (state: RootState) => ({
@@ -18,11 +18,10 @@ type CharactersProps = PropsFromRedux & {
 };
 
 const Characters = (props: CharactersProps) => {
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useDispatch();
     useEffect(() => {
-        // @ts-ignore
         dispatch(getCharacters());
-    }, []);
+    }, [dispatch]);
     return (
         <div className="Characters-container">
             {props.characters?.map((character: CharacterInterface) => (

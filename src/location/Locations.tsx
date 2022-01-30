@@ -1,23 +1,27 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import LocationView, { LocationInterface } from './LocationView';
-import { getLocations } from '../actions/LocationActions';
+import { getLocations } from './LocationActions';
+import { RootState } from '../store';
 
-interface LocationProps {
+const mapStateToProps = (state: RootState) => ({ locations: state.location.locations });
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type LocationsProps = PropsFromRedux & {
     locations: Array<LocationInterface>;
-}
+};
 
-const mapStateToProps = (state: any) => ({ locations: state.locations.locations });
-
-const Locations = ({ locations }: LocationProps) => {
+const Locations = ({ locations }: LocationsProps) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getLocations());
-    }, []);
+    }, [dispatch]);
 
     return (
         <div>
-            {locations.map((location) => (
+            {locations.map((location: LocationInterface) => (
                 <LocationView key={location.id} location={location} />
             ))}
             <LocationView />
@@ -25,4 +29,4 @@ const Locations = ({ locations }: LocationProps) => {
     );
 };
 
-export default connect(mapStateToProps)(Locations);
+export default connector(Locations);

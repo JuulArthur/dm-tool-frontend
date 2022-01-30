@@ -1,7 +1,12 @@
 import { combineReducers } from 'redux';
-import characterReducer from './characterReducer';
-import locationReducer from './LocationReducer';
+import character from './characterReducer';
+import location from './LocationReducer';
+import chapter from './ChapterReducer';
 
-const allReducers = combineReducers({ character: characterReducer, locations: locationReducer });
+const allReducers = combineReducers({
+    character,
+    location,
+    chapter,
+});
 
 export default allReducers;

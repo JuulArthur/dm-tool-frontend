@@ -8,20 +8,20 @@ export interface LocationInterface {
     name: string;
     description: string;
     info: string;
-    'orginial-content': string;
+    originalContent: string;
 }
 
 interface LocationProps {
     location?: LocationInterface;
 }
 
-const LocationView = ({ location }: LocationProps ) => {
+const LocationView = ({ location }: LocationProps) => {
     const [name, setName] = useState('');
     const [info, setInfo] = useState('');
 
     const createLocation = async () => {
-        fetchJSON({url: '/location', method: 'POST', body: {name, info}})
-    }
+        return fetchJSON({ url: '/location', method: 'POST', body: { name, info } });
+    };
 
     if (location) {
         return (
@@ -38,9 +38,9 @@ const LocationView = ({ location }: LocationProps ) => {
         <Card>
             <p>Create new location</p>
             <label>Name</label>
-            <input onChange={(e) => setName(e.target.value)}/>
+            <input onChange={(e) => setName(e.target.value)} />
             <label>Info</label>
-            <input onChange={(e) => setInfo(e.target.value)}/>
+            <input onChange={(e) => setInfo(e.target.value)} />
             <button onClick={() => createLocation()}>Lagre</button>
         </Card>
     );
