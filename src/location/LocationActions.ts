@@ -1,4 +1,4 @@
-import { FETCH_LOCATIONS, GOT_LOCATIONS, GOT_LOCATION } from '../reducers/LocationReducer';
+import { FETCH_LOCATIONS, GOT_LOCATIONS, GOT_LOCATION } from './LocationReducer';
 import { fetchJSON } from '../utils';
 
 export const getLocations = () => {

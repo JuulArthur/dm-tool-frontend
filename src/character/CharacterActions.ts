@@ -1,4 +1,4 @@
-import { FETCH_CHARACTERS, GOT_CHARACTERS } from '../reducers/characterReducer';
+import { FETCH_CHARACTERS, GOT_CHARACTERS } from './CharacterReducer';
 import { fetchJSON } from '../utils';
 
 export const getCharacters = () => {

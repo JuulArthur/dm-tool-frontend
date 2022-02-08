@@ -1,4 +1,4 @@
-import { FETCH_CHAPTERS, GOT_CHAPTERS, GOT_CHAPTER } from '../reducers/ChapterReducer';
+import { FETCH_CHAPTERS, GOT_CHAPTERS, GOT_CHAPTER } from './ChapterReducer';
 import { fetchJSON } from '../utils';
 
 export const getChapters = () => {

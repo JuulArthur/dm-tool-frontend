@@ -9,6 +9,7 @@ export interface LocationInterface {
     description: string;
     info: string;
     originalContent: string;
+    chapterId: string;
 }
 
 interface LocationProps {

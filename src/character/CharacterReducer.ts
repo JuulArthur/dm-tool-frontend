@@ -1,5 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { CharacterInterface } from '../character/Character';
+import { createSelector } from 'reselect';
+import { CharacterInterface } from './Character';
+import { LocationInterface } from '../location/LocationView';
+import { RootState } from '../store';
 
 export const GOT_CHARACTERS = 'GOT_CHARACTERS';
 export const FETCH_CHARACTERS = 'FETCH_CHARACTERS';
@@ -24,5 +27,12 @@ const characterReducer = (
             return state || [];
     }
 };
+
+const getAllCharacters = (state: RootState, chapterId: string) => state.character.characters;
+
+export const getCharactersForChapter = createSelector(
+    [getAllCharacters, (state, chapterId) => chapterId],
+    (characters, chapterId) => characters.filter((character: LocationInterface) => character.chapterId === chapterId)
+);
 
 export default characterReducer;

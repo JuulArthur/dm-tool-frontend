@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ChapterInterface } from '../chapters/Chapter';
+import { ChapterInterface } from './Chapter';
 
 export const FETCH_CHAPTERS = 'FETCH_CHAPTERS';
 export const GOT_CHAPTERS = 'GOT_CHAPTERS';

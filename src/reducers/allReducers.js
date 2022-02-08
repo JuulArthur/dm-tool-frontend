@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import character from './characterReducer';
-import location from './LocationReducer';
-import chapter from './ChapterReducer';
+import character from '../character/CharacterReducer';
+import location from '../location/LocationReducer';
+import chapter from '../chapters/ChapterReducer';
 
 const allReducers = combineReducers({
     character,

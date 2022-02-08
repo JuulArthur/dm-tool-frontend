@@ -1,5 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { LocationInterface } from '../location/LocationView';
+import { LocationInterface } from './LocationView';
+import { createSelector } from 'reselect';
 
 export const FETCH_LOCATIONS = 'FETCH_LOCATIONS';
 export const GOT_LOCATIONS = 'GOT_LOCATIONS';
@@ -35,5 +36,14 @@ const locationReducer = (
             return state || [];
     }
 };
+
+const getAllLocations = (state: any, chapterId: string) => state.location.locations || [];
+
+export const getLocationsForChapter = createSelector(
+    [getAllLocations, (state, chapterId) => chapterId],
+    (locations, chapterId) => {
+        return locations.filter((location: LocationInterface) => location.chapterId === chapterId);
+    }
+);
 
 export default locationReducer;

@@ -4,6 +4,7 @@ import Character, { CharacterInterface } from './Character';
 import './Characters.css';
 import { RootState } from '../store';
 import { getCharacters } from './CharacterActions';
+import { getLocations } from '../location/LocationActions';
 
 //https://redux.js.org/usage/usage-with-typescript
 const mapStateToProps = (state: RootState) => ({
@@ -21,6 +22,7 @@ const Characters = (props: CharactersProps) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCharacters());
+        dispatch(getLocations());
     }, [dispatch]);
     return (
         <div className="Characters-container">
