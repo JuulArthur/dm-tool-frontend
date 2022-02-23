@@ -1,0 +1,7 @@
+.DragAndDropList-element {
+    margin: 1rem auto;
+    padding: 1rem;
+    background: #61dafb;
+    max-width: 800px;
+    border-radius: 1rem;
+}

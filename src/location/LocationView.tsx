@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Card from '../component/Card';
+import Card from '../component/card/Card';
 import { fetchJSON } from '../utils';
 import { Link } from 'react-router-dom';
 

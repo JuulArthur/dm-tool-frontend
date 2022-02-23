@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ConnectedProps, connect, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { useParams } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { LocationInterface } from '../location/LocationView';
 import { CharacterInterface } from '../character/Character';
 import { getLocationsForChapter } from '../location/LocationReducer';
 import { getCharactersForChapter } from '../character/CharacterReducer';
+import DragAndDropList from '../component/dragAndDropList/DragAndDropList';
+import './Chapter.css';
 
 export interface ChapterInterface {
     id: number;
@@ -52,24 +54,31 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                 {chapter.id} - {chapter.title}
             </h1>
             <div>{chapter?.description}</div>
-            <h2>Locations</h2>
-            <div>
-                {locations.map((location: LocationInterface) => (
-                    <div key={'location-' + location.id}>
-                        <div>Location id: {location.id}</div>
-                        <div>{location.name}</div>
+            <div className="Chapter-container">
+                <div className="Chapter-contentContainer">
+                    <h2>Locations</h2>
+                    <div>
+                        {locations.map((location: LocationInterface) => (
+                            <div className="Chapter-contentCard" key={'location-' + location.id}>
+                                <div>Location id: {location.id}</div>
+                                <div>{location.name}</div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <h2>Characters</h2>
-            <div>
-                {characters.map((character: CharacterInterface) => (
-                    <div key={'character-' + character.id}>
-                        <div>Location id: {character.id}</div>
-                        <div>{character.name}</div>
+                </div>
+                <div className="Chapter-contentContainer">
+                    <h2>Characters</h2>
+                    <div>
+                        {characters.map((character: CharacterInterface) => (
+                            <div className="Chapter-contentCard" key={'character-' + character.id}>
+                                <div>Location id: {character.id}</div>
+                                <div>{character.name}</div>
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
+            <DragAndDropList />
         </div>
     );
 };

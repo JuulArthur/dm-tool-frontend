@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Characters.css';
 import { fetchJSON } from '../utils';
-import Card from '../component/Card';
+import Card from '../component/card/Card';
 
 export interface CharacterInterface {
     id: number;

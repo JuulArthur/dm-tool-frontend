@@ -1,0 +1,22 @@
+.Chapter-container {
+    display: flex;
+    max-width: 800px;
+    justify-content: center;
+    margin: auto;
+}
+
+.Chapter-contentContainer-old {
+    margin: 1rem;
+    padding: 2rem;
+    background: antiquewhite;
+    border-radius: 1rem;
+    width: 200px;
+}
+
+.Chapter-contentCard {
+    margin: 1rem;
+    padding: 2rem;
+    background: antiquewhite;
+    border-radius: 1rem;
+    width: 200px;
+}
