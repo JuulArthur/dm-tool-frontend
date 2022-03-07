@@ -20,11 +20,12 @@ const Chapters = ({ chapters }: CharacterProps) => {
     useEffect(() => {
         dispatch(getChapters());
     }, [dispatch]);
+    
 
     return (
         <div>
             {chapters.map((chapter: ChapterInterface) => (
-                <a href={`/chapter/${chapter.id}`}>
+                <a href={`/chapter/${chapter.id}`} key={`chapter-${chapter.id}`}>
                     <div>{chapter.id}</div>
                     <div>{chapter.title}</div>
                     <div>{chapter.description}</div>

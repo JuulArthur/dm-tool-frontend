@@ -2,6 +2,10 @@
   "name": "dm-tool",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.19.0",
+    "npm": "6.14.16"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^5.11.4",

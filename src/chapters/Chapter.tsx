@@ -6,11 +6,13 @@ import { getChapter } from './ChapterActions';
 import { getLocations } from '../location/LocationActions';
 import { getCharacters } from '../character/CharacterActions';
 import { LocationInterface } from '../location/LocationView';
-import { CharacterInterface } from '../character/Character';
+import Character, { CharacterInterface } from '../character/Character';
 import { getLocationsForChapter } from '../location/LocationReducer';
 import { getCharactersForChapter } from '../character/CharacterReducer';
 import DragAndDropList from '../component/dragAndDropList/DragAndDropList';
 import './Chapter.css';
+import DragAndDropItem from '../component/dragAndDropList/DragAndDropListItem';
+import Characters from '../character/Characters';
 
 export interface ChapterInterface {
     id: number;
@@ -77,8 +79,13 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                         ))}
                     </div>
                 </div>
+                <div className="Chapter-contentContainer">
+                    <h2>Locationstuff</h2>
+                    <div>
+                        <DragAndDropList items={characters} elementCreator={(character) => <Character character={character}/>} />
+                    </div>
+                </div>
             </div>
-            <DragAndDropList />
         </div>
     );
 };
