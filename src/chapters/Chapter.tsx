@@ -59,31 +59,16 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
             <div className="Chapter-container">
                 <div className="Chapter-contentContainer">
                     <h2>Locations</h2>
-                    <div>
-                        {locations.map((location: LocationInterface) => (
-                            <div className="Chapter-contentCard" key={'location-' + location.id}>
-                                <div>Location id: {location.id}</div>
-                                <div>{location.name}</div>
-                            </div>
-                        ))}
-                    </div>
+                    <DragAndDropList items={locations} elementCreator={(location: LocationInterface) => (
+                        <div className="Chapter-contentCard" key={'location-' + location.id}>
+                            <div>Location id: {location.id}</div>
+                            <div>{location.name}</div>
+                        </div>
+                    )} />
                 </div>
                 <div className="Chapter-contentContainer">
                     <h2>Characters</h2>
-                    <div>
-                        {characters.map((character: CharacterInterface) => (
-                            <div className="Chapter-contentCard" key={'character-' + character.id}>
-                                <div>Location id: {character.id}</div>
-                                <div>{character.name}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="Chapter-contentContainer">
-                    <h2>Locationstuff</h2>
-                    <div>
-                        <DragAndDropList items={characters} elementCreator={(character) => <Character character={character}/>} />
-                    </div>
+                    <DragAndDropList items={characters} elementCreator={(character: CharacterInterface) => <Character character={character}/>} />
                 </div>
             </div>
         </div>
