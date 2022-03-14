@@ -11,8 +11,7 @@ import { getLocationsForChapter } from '../location/LocationReducer';
 import { getCharactersForChapter } from '../character/CharacterReducer';
 import DragAndDropList from '../component/dragAndDropList/DragAndDropList';
 import './Chapter.css';
-import DragAndDropItem from '../component/dragAndDropList/DragAndDropListItem';
-import Characters from '../character/Characters';
+import LocationCard from '../location/LocationCard';
 
 export interface ChapterInterface {
     id: number;
@@ -65,12 +64,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                         keyPrefix="location"
                         items={locations}
                         indexOrder={[]}
-                        elementCreator={(location: LocationInterface) => (
-                            <div className="Chapter-contentCard" key={'location-' + location.id}>
-                                <div>Location id: {location.id}</div>
-                                <div>{location.name}</div>
-                            </div>
-                        )}
+                        elementCreator={(location: LocationInterface) => <LocationCard location={location} />}
                     />
                 </div>
                 <div className="Chapter-contentContainer">

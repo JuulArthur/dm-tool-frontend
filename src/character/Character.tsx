@@ -23,10 +23,10 @@ const Character = ({ character }: CharacterProps) => {
 
     if (character) {
         return (
-            <div className="Character-container">
+            <Card>
                 <p>Character name: {character.name}</p>
                 <p>Character age: {character.age}</p>
-            </div>
+            </Card>
         );
     }
 
