@@ -5,15 +5,25 @@ import './DragAndDropList.css';
 import DragAndDropItem from './DragAndDropListItem';
 
 interface DragAndDropListProps {
-    items: any[],
-    elementCreator: (item: any) => JSX.Element,
+    items: any[];
+    indexOrder: number[];
+    elementCreator: (item: any) => JSX.Element;
+    keyPrefix: string;
 }
 
-const DragAndDropList = ({ items, elementCreator }: DragAndDropListProps) => {
+const DragAndDropList = ({ items, indexOrder, elementCreator, keyPrefix }: DragAndDropListProps) => {
     const [itemsCopy, setItemsCopy] = useState(items);
     useEffect(() => {
+        //Fiks problem hvor ikke alltid karakterer vises riktig
         if (itemsCopy?.length != items.length) {
-            setItemsCopy(items);
+            const unOrderedItemList = [...items];
+            const unOrderedIndexList = unOrderedItemList.map((item) => item.id);
+            const orderedList = [];
+            for (let index of indexOrder) {
+                orderedList.push(unOrderedItemList.splice(unOrderedIndexList.indexOf(index), 1)[0]);
+            }
+            orderedList.push(...unOrderedItemList);
+            setItemsCopy(orderedList);
         }
     }, [items]);
 
@@ -34,7 +44,7 @@ const DragAndDropList = ({ items, elementCreator }: DragAndDropListProps) => {
             <div>
                 {itemsCopy.map((item, index) => (
                     <DragAndDropItem
-                        key={item.id}
+                        key={keyPrefix + item.id}
                         // @ts-ignore
                         index={index}
                         moveListItem={moveListItem}
@@ -45,7 +55,6 @@ const DragAndDropList = ({ items, elementCreator }: DragAndDropListProps) => {
             </div>
         </DndProvider>
     );
-
 };
 
 export default DragAndDropList;

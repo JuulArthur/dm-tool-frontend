@@ -18,6 +18,7 @@ export interface ChapterInterface {
     id: number;
     title: string;
     description: string;
+    characterOrder: number[] | null;
 }
 
 const mapStateToProps = (state: RootState, props: any) => {
@@ -50,6 +51,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     if (!chapter) {
         return <div>A dragon ate this chapter, how unfortunate :/</div>;
     }
+
     return (
         <div>
             <h1>
@@ -59,16 +61,26 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
             <div className="Chapter-container">
                 <div className="Chapter-contentContainer">
                     <h2>Locations</h2>
-                    <DragAndDropList items={locations} elementCreator={(location: LocationInterface) => (
-                        <div className="Chapter-contentCard" key={'location-' + location.id}>
-                            <div>Location id: {location.id}</div>
-                            <div>{location.name}</div>
-                        </div>
-                    )} />
+                    <DragAndDropList
+                        keyPrefix="location"
+                        items={locations}
+                        indexOrder={[]}
+                        elementCreator={(location: LocationInterface) => (
+                            <div className="Chapter-contentCard" key={'location-' + location.id}>
+                                <div>Location id: {location.id}</div>
+                                <div>{location.name}</div>
+                            </div>
+                        )}
+                    />
                 </div>
                 <div className="Chapter-contentContainer">
                     <h2>Characters</h2>
-                    <DragAndDropList items={characters} elementCreator={(character: CharacterInterface) => <Character character={character}/>} />
+                    <DragAndDropList
+                        keyPrefix="character"
+                        items={characters}
+                        indexOrder={chapter.characterOrder}
+                        elementCreator={(character: CharacterInterface) => <Character character={character} />}
+                    />
                 </div>
             </div>
         </div>
