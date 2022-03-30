@@ -21,3 +21,21 @@ export const getChapter = ({ id }: { id: string | undefined }) => {
             .catch((e) => console.log(e + ''));
     };
 };
+
+export const updateChapter = ({
+    id,
+    characterOrder,
+    locationOrder,
+}: {
+    id: string;
+    characterOrder?: number[];
+    locationOrder?: number[];
+}) => {
+    return (dispatch: any) => {
+        return fetchJSON({ url: '/chapter/1', method: 'PATCH', body: { id, characterOrder, locationOrder } })
+            .then((result) => {
+                //dispatch({ type: GOT_CHARACTERS, payload: result.body });
+            })
+            .catch((e) => console.log(e + ''));
+    };
+};

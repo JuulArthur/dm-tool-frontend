@@ -5,11 +5,12 @@ import './DragAndDropList.css';
 interface DragAndDropItemProps {
     index: string;
     moveListItem: any;
+    dropHook: () => void;
     children: JSX.Element;
 }
 
 //https://medium.com/nmc-techblog/easy-drag-and-drop-in-react-22778b30ba37
-const DragAndDropItem = ({ children, index, moveListItem }: DragAndDropItemProps) => {
+const DragAndDropItem = ({ children, index, moveListItem, dropHook }: DragAndDropItemProps) => {
     const [{ isDragging }, dragRef] = useDrag({
         type: 'item',
         item: { index },
@@ -39,6 +40,9 @@ const DragAndDropItem = ({ children, index, moveListItem }: DragAndDropItemProps
             // @ts-ignore
             item.index = hoverIndex;
             return moveListItem(dragIndex, hoverIndex);
+        },
+        drop: () => {
+            dropHook();
         },
     });
 

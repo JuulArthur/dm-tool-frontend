@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { ConnectedProps, connect, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { useParams } from 'react-router-dom';
-import { getChapter } from './ChapterActions';
+import { getChapter, updateChapter } from './ChapterActions';
 import { getLocations } from '../location/LocationActions';
 import { getCharacters } from '../character/CharacterActions';
 import { LocationInterface } from '../location/LocationView';
@@ -17,7 +17,8 @@ export interface ChapterInterface {
     id: number;
     title: string;
     description: string;
-    characterOrder: number[] | null;
+    characterOrder?: number[];
+    locationOrder?: number[];
 }
 
 const mapStateToProps = (state: RootState, props: any) => {
@@ -47,6 +48,14 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
         dispatch(getLocations());
         dispatch(getCharacters());
     }, [id, dispatch]);
+
+    const updateCharacterOrder = ({ orderList }: { orderList: Array<number> }) => {
+        dispatch(updateChapter({ id: chapter.id, characterOrder: orderList }));
+    };
+
+    const updateLocationOrder = ({ orderList }: { orderList: Array<number> }) => {
+        dispatch(updateChapter({ id: chapter.id, locationOrder: orderList }));
+    };
     if (!chapter) {
         return <div>A dragon ate this chapter, how unfortunate :/</div>;
     }
@@ -63,8 +72,9 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                     <DragAndDropList
                         keyPrefix="location"
                         items={locations}
-                        indexOrder={[]}
+                        indexOrder={chapter.locationOrder}
                         elementCreator={(location: LocationInterface) => <LocationCard location={location} />}
+                        saveOrder={updateLocationOrder}
                     />
                 </div>
                 <div className="Chapter-contentContainer">
@@ -74,6 +84,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                         items={characters}
                         indexOrder={chapter.characterOrder}
                         elementCreator={(character: CharacterInterface) => <Character character={character} />}
+                        saveOrder={updateCharacterOrder}
                     />
                 </div>
             </div>
