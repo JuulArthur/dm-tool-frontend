@@ -19,15 +19,24 @@ export interface ChapterInterface {
     description: string;
     characterOrder?: number[];
     locationOrder?: number[];
+    characterReferences?: CharacterToChapterInterface[];
+}
+
+export interface CharacterToChapterInterface {
+    id: string;
+    characterId: number;
+    chapterId: number;
+    order?: number;
 }
 
 const mapStateToProps = (state: RootState, props: any) => {
     const chapter = state.chapter.currentChapter;
     const chapterId = chapter?.id;
+    const characters = chapter && getCharactersForChapter(state, chapter?.characterReferences);
     return {
         chapter,
         locations: getLocationsForChapter(state, chapterId),
-        characters: getCharactersForChapter(state, chapterId),
+        characters,
     };
 };
 const connector = connect(mapStateToProps);
@@ -36,7 +45,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ChapterProps = PropsFromRedux & {
     chapter: ChapterInterface | null;
     locations: Array<LocationInterface> | undefined;
-    characters: Array<CharacterInterface> | undefined;
+    characters?: Array<CharacterInterface> | undefined;
+    characters2?: Array<CharacterInterface>;
 };
 type ChapterParams = { id?: string | undefined };
 
@@ -44,9 +54,9 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     const dispatch = useDispatch();
     const { id } = useParams<ChapterParams>();
     useEffect(() => {
-        dispatch(getChapter({ id }));
         dispatch(getLocations());
         dispatch(getCharacters());
+        dispatch(getChapter({ id }));
     }, [id, dispatch]);
 
     const updateCharacterOrder = ({ orderList }: { orderList: Array<number> }) => {
@@ -59,6 +69,8 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     if (!chapter) {
         return <div>A dragon ate this chapter, how unfortunate :/</div>;
     }
+
+    console.log('characters', characters);
 
     return (
         <div>

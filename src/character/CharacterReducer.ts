@@ -30,9 +30,26 @@ const characterReducer = (
 
 const getAllCharacters = (state: RootState, chapterId: string) => state.character.characters;
 
-export const getCharactersForChapter = createSelector(
+export const getCharactersForChapterOld = createSelector(
     [getAllCharacters, (state, chapterId) => chapterId],
     (characters, chapterId) => characters.filter((character: LocationInterface) => character.chapterId === chapterId)
+);
+
+export const getCharactersForChapter = createSelector(
+    [getAllCharacters, (state, characterToChapterReferences) => characterToChapterReferences],
+    (characters, characterToChapterReferences) => {
+        const charactersForChapter = [];
+        for (let characterReference of characterToChapterReferences) {
+            const characterObject = characters.find(
+                (character: CharacterInterface) => character.id === characterReference.characterId
+            );
+            charactersForChapter.push({
+                ...characterObject,
+                order: characterReference.order,
+            });
+        }
+        return charactersForChapter.filter((character) => !!character);
+    }
 );
 
 export default characterReducer;

@@ -16,7 +16,7 @@ interface DragAndDropListProps {
 const DragAndDropList = ({ items, indexOrder, elementCreator, keyPrefix, saveOrder }: DragAndDropListProps) => {
     const [itemsCopy, setItemsCopy] = useState([...items]);
     useEffect(() => {
-        //Fiks problem hvor ikke alltid karakterer vises riktig
+        //TODO: Fiks slik at order bestemmes av order på elementet og fiks slik at locaitons hentes på samme måte som characters
         if (itemsCopy?.length !== items.length) {
             const unOrderedItemList = [...items];
             const unOrderedIndexList = unOrderedItemList.map((item) => item.id);
