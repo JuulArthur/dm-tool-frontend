@@ -23,21 +23,14 @@ export const getChapter = ({ id }: { id: string | undefined }) => {
     };
 };
 
-export const updateChapter = ({
-    id,
-    characterOrder,
-    locationOrder,
-}: {
-    id: string;
-    characterOrder?: number[];
-    locationOrder?: number[];
-}) => {
+export const updateChapter = ({ id, title, description }: { id: string; title?: string; description?: string }) => {
+    console.log('I am ready to update', id, description, title);
     return (dispatch: any) => {
-        return fetchJSON({ url: '/chapter/1', method: 'PATCH', body: { id, characterOrder, locationOrder } })
+        return fetchJSON({ url: '/chapter/1', method: 'PATCH', body: { id, title, description } })
             .then((result) => {
-                //dispatch({ type: GOT_CHARACTERS, payload: result.body });
+                dispatch({ type: GOT_CHAPTER, payload: result.body });
             })
-            .catch((e) => console.log(e + ''));
+            .catch((e) => console.log('Something went wrong when updating chapter: ' + e));
     };
 };
 
@@ -51,7 +44,7 @@ export const updateCharacterOrderForChapter = ({
             .then((result) => {
                 //dispatch({ type: GOT_CHARACTERS, payload: result.body });
             })
-            .catch((e) => console.log(e + ''));
+            .catch((e) => console.log('Something went wrong when updating character order: ' + e));
     };
 };
 
@@ -61,6 +54,6 @@ export const updateLocationOrderForChapter = ({ locationOrder }: { locationOrder
             .then((result) => {
                 //dispatch({ type: GOT_CHARACTERS, payload: result.body });
             })
-            .catch((e) => console.log(e + ''));
+            .catch((e) => console.log('Something went wrong when updating location order: ' + e));
     };
 };

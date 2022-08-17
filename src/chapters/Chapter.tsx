@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { ConnectedProps, connect, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { useParams } from 'react-router-dom';
-import { getChapter, updateCharacterOrderForChapter, updateLocationOrderForChapter } from './ChapterActions';
+import {
+    getChapter,
+    updateChapter,
+    updateCharacterOrderForChapter,
+    updateLocationOrderForChapter,
+} from './ChapterActions';
 import { getLocations } from '../location/LocationActions';
 import { getCharacters } from '../character/CharacterActions';
 import { LocationInterface } from '../location/LocationView';
@@ -12,6 +17,7 @@ import { getCharactersForChapter } from '../character/CharacterReducer';
 import DragAndDropList from '../component/dragAndDropList/DragAndDropList';
 import './Chapter.css';
 import LocationCard from '../location/LocationCard';
+import EditableField from '../component/editableField/EditableField';
 
 export interface ChapterInterface {
     id: number;
@@ -106,10 +112,17 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
 
     return (
         <div>
-            <h1>
-                {chapter.id} - {chapter.title}
-            </h1>
-            <div>{chapter?.description}</div>
+            <EditableField
+                text={chapter.title}
+                onSave={(text) => dispatch(updateChapter({ id: chapter.id, title: text }))}
+            >
+                <h1>
+                    {chapter.id} - {chapter.title}
+                </h1>
+            </EditableField>
+            <EditableField onSave={(text) => dispatch(updateChapter({ id: chapter.id, description: text }))}>
+                <div>{chapter?.description}</div>
+            </EditableField>
             <div className="Chapter-container">
                 <div className="Chapter-contentContainer">
                     <h2>Locations</h2>
