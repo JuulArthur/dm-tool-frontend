@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ConnectedProps, connect, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { useParams } from 'react-router-dom';
-import { getChapter, updateChapter } from './ChapterActions';
+import { getChapter, updateCharacterOrderForChapter, updateLocationOrderForChapter } from './ChapterActions';
 import { getLocations } from '../location/LocationActions';
 import { getCharacters } from '../character/CharacterActions';
 import { LocationInterface } from '../location/LocationView';
@@ -31,11 +31,11 @@ export interface CharacterToChapterInterface {
 
 const mapStateToProps = (state: RootState, props: any) => {
     const chapter = state.chapter.currentChapter;
-    const chapterId = chapter?.id;
-    const characters = chapter && getCharactersForChapter(state, chapter?.characterReferences);
+    const characters = chapter?.id && getCharactersForChapter(state, chapter?.characterReferences);
+    const locations = chapter?.id && getLocationsForChapter(state, chapter?.locationReferences);
     return {
         chapter,
-        locations: getLocationsForChapter(state, chapterId),
+        locations,
         characters,
     };
 };
@@ -53,24 +53,56 @@ type ChapterParams = { id?: string | undefined };
 const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     const dispatch = useDispatch();
     const { id } = useParams<ChapterParams>();
+    const [characterOrder, setCharacterOrder] = useState([]);
+    const [locationOrder, setLocationOrder] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         dispatch(getLocations());
         dispatch(getCharacters());
-        dispatch(getChapter({ id }));
+        // @ts-ignore
+        dispatch(getChapter({ id })).then(() => {
+            setIsLoading(false);
+        });
     }, [id, dispatch]);
 
-    const updateCharacterOrder = ({ orderList }: { orderList: Array<number> }) => {
-        dispatch(updateChapter({ id: chapter.id, characterOrder: orderList }));
+    useEffect(() => {
+        if (characters) {
+            setCharacterOrder(characters.sort((a: any, b: any) => a.order - b.order).map((a: any) => a.id));
+        }
+        if (locations) {
+            setLocationOrder(locations.sort((a: any, b: any) => a.order - b.order).map((a: any) => a.id));
+        }
+    }, [characters, locations]);
+
+    const updateCharacterOrder = ({ orderList }: { orderList: any[] }) => {
+        const characterOrder = orderList.map((element, index) => ({
+            id: element.characterReferenceId,
+            characterId: element.id,
+            chapterId: chapter.id,
+            order: index,
+        }));
+        dispatch(updateCharacterOrderForChapter({ characterOrder }));
     };
 
-    const updateLocationOrder = ({ orderList }: { orderList: Array<number> }) => {
-        dispatch(updateChapter({ id: chapter.id, locationOrder: orderList }));
+    const updateLocationOrder = ({ orderList }: { orderList: any[] }) => {
+        const locationOrder = orderList.map((element, index) => ({
+            locationId: element.id,
+            chapterId: chapter.id,
+            order: index,
+        }));
+        dispatch(updateLocationOrderForChapter({ locationOrder: locationOrder }));
     };
-    if (!chapter) {
-        return <div>A dragon ate this chapter, how unfortunate :/</div>;
+    if (isLoading) {
+        return <div>You must gather your party before venturing forth!</div>;
     }
-
-    console.log('characters', characters);
+    if (!chapter?.id) {
+        if (Math.random() >= 0.5) {
+            return <div>A dragon ate this chapter, how unfortunate :/</div>;
+        } else {
+            return <div>This chapter does not seem to have been written yet. Do you live in the future?</div>;
+        }
+    }
 
     return (
         <div>
@@ -84,7 +116,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                     <DragAndDropList
                         keyPrefix="location"
                         items={locations}
-                        indexOrder={chapter.locationOrder}
+                        indexOrder={locationOrder}
                         elementCreator={(location: LocationInterface) => <LocationCard location={location} />}
                         saveOrder={updateLocationOrder}
                     />
@@ -94,7 +126,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                     <DragAndDropList
                         keyPrefix="character"
                         items={characters}
-                        indexOrder={chapter.characterOrder}
+                        indexOrder={characterOrder}
                         elementCreator={(character: CharacterInterface) => <Character character={character} />}
                         saveOrder={updateCharacterOrder}
                     />

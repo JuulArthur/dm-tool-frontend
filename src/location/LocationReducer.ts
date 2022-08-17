@@ -40,9 +40,20 @@ const locationReducer = (
 const getAllLocations = (state: any, chapterId: string) => state.location.locations || [];
 
 export const getLocationsForChapter = createSelector(
-    [getAllLocations, (state, chapterId) => chapterId],
-    (locations, chapterId) => {
-        return locations.filter((location: LocationInterface) => location.chapterId === chapterId);
+    [getAllLocations, (state, locationToChapterReferences) => locationToChapterReferences],
+    (locations, locationToChapterReferences) => {
+        const locationsForChapter = [];
+        for (let locationReference of locationToChapterReferences) {
+            const locationObject = locations.find(
+                (location: LocationInterface) => location.id === locationReference.locationId
+            );
+            locationsForChapter.push({
+                ...locationObject,
+                order: locationReference.order,
+                characterReferenceId: locationReference.id,
+            });
+        }
+        return locationsForChapter.filter((character) => !!character);
     }
 );
 

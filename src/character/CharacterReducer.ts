@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { CharacterInterface } from './Character';
-import { LocationInterface } from '../location/LocationView';
 import { RootState } from '../store';
 
 export const GOT_CHARACTERS = 'GOT_CHARACTERS';
@@ -30,11 +29,6 @@ const characterReducer = (
 
 const getAllCharacters = (state: RootState, chapterId: string) => state.character.characters;
 
-export const getCharactersForChapterOld = createSelector(
-    [getAllCharacters, (state, chapterId) => chapterId],
-    (characters, chapterId) => characters.filter((character: LocationInterface) => character.chapterId === chapterId)
-);
-
 export const getCharactersForChapter = createSelector(
     [getAllCharacters, (state, characterToChapterReferences) => characterToChapterReferences],
     (characters, characterToChapterReferences) => {
@@ -46,6 +40,7 @@ export const getCharactersForChapter = createSelector(
             charactersForChapter.push({
                 ...characterObject,
                 order: characterReference.order,
+                characterReferenceId: characterReference.id,
             });
         }
         return charactersForChapter.filter((character) => !!character);

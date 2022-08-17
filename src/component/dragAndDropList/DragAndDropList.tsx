@@ -3,7 +3,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import './DragAndDropList.css';
 import DragAndDropItem from './DragAndDropListItem';
-import { clearConfigCache } from 'prettier';
 
 interface DragAndDropListProps {
     items: any[];
@@ -13,36 +12,28 @@ interface DragAndDropListProps {
     saveOrder: (order: any) => void;
 }
 
-const DragAndDropList = ({ items, indexOrder, elementCreator, keyPrefix, saveOrder }: DragAndDropListProps) => {
+const DragAndDropList = ({ items, elementCreator, keyPrefix, saveOrder }: DragAndDropListProps) => {
     const [itemsCopy, setItemsCopy] = useState([...items]);
     useEffect(() => {
-        //TODO: Fiks slik at order bestemmes av order på elementet og fiks slik at locaitons hentes på samme måte som characters
-        if (itemsCopy?.length !== items.length) {
-            const unOrderedItemList = [...items];
-            const unOrderedIndexList = unOrderedItemList.map((item) => item.id);
-            const orderedList = [];
-            for (let index of indexOrder) {
-                orderedList.push(unOrderedItemList[unOrderedIndexList.indexOf(index)]);
-            }
-            orderedList.push(...unOrderedItemList.filter((item) => indexOrder.indexOf(item.id) === -1));
-            setItemsCopy(orderedList);
-        }
+        setItemsCopy(itemsCopy.sort((a: any, b: any) => a.order - b.order));
     }, [items]);
 
     const moveListItem = useCallback(
         (dragIndex, hoverIndex) => {
-            const dragItem = itemsCopy[dragIndex];
-            const hoverItem = itemsCopy[hoverIndex];
-            const updatedPetsList = [...itemsCopy];
-            updatedPetsList[hoverIndex] = dragItem;
-            updatedPetsList[dragIndex] = hoverItem;
-            setItemsCopy(updatedPetsList);
+            if (dragIndex !== hoverIndex) {
+                const dragItem = itemsCopy[dragIndex];
+                const hoverItem = itemsCopy[hoverIndex];
+                const updatedSortetList = [...itemsCopy];
+                updatedSortetList[hoverIndex] = dragItem;
+                updatedSortetList[dragIndex] = hoverItem;
+                setItemsCopy(updatedSortetList);
+            }
         },
         [itemsCopy]
     );
 
     const dropHook = () => {
-        saveOrder({ orderList: itemsCopy.map((item) => item.id) });
+        saveOrder({ orderList: itemsCopy });
     };
 
     return (
