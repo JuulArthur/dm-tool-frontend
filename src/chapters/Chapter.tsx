@@ -8,7 +8,7 @@ import {
     updateCharacterOrderForChapter,
     updateLocationOrderForChapter,
 } from './ChapterActions';
-import { getLocations } from '../location/LocationActions';
+import { getLocations, createLocation, getLocationToChapterReferences } from '../location/LocationActions';
 import { getCharacters } from '../character/CharacterActions';
 import { LocationInterface } from '../location/LocationView';
 import Character, { CharacterInterface } from '../character/Character';
@@ -38,7 +38,7 @@ export interface CharacterToChapterInterface {
 const mapStateToProps = (state: RootState, props: any) => {
     const chapter = state.chapter.currentChapter;
     const characters = chapter?.id && getCharactersForChapter(state, chapter?.characterReferences);
-    const locations = chapter?.id && getLocationsForChapter(state, chapter?.locationReferences);
+    const locations = chapter?.id && getLocationsForChapter(state, chapter.id);
     return {
         chapter,
         locations,
@@ -63,13 +63,18 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     const [locationOrder, setLocationOrder] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        dispatch(getLocations());
-        dispatch(getCharacters());
+    const fetchEverything = async (id?: string) => {
+        await dispatch(getLocations());
+        await dispatch(getCharacters());
+        await dispatch(getLocationToChapterReferences());
         // @ts-ignore
-        dispatch(getChapter({ id })).then(() => {
+        await dispatch(getChapter({ id })).then(() => {
             setIsLoading(false);
         });
+    };
+
+    useEffect(() => {
+        fetchEverything(id);
     }, [id, dispatch]);
 
     useEffect(() => {
@@ -102,13 +107,15 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
     if (isLoading) {
         return <div>You must gather your party before venturing forth!</div>;
     }
-    if (!chapter?.id) {
+    if (!chapter || !chapter.id) {
         if (Math.random() >= 0.5) {
             return <div>A dragon ate this chapter, how unfortunate :/</div>;
         } else {
             return <div>This chapter does not seem to have been written yet. Do you live in the future?</div>;
         }
     }
+
+    const createLocationAndUpdateChapter = () => dispatch(createLocation({ chapterId: chapter.id }));
 
     return (
         <div>
@@ -121,7 +128,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                 </h1>
             </EditableField>
             <EditableField onSave={(text) => dispatch(updateChapter({ id: chapter.id, description: text }))}>
-                <div>{chapter?.description}</div>
+                <div>{chapter.description}</div>
             </EditableField>
             <div className="Chapter-container">
                 <div className="Chapter-contentContainer">
@@ -132,6 +139,7 @@ const Chapter = ({ chapter, locations, characters }: ChapterProps) => {
                         indexOrder={locationOrder}
                         elementCreator={(location: LocationInterface) => <LocationCard location={location} />}
                         saveOrder={updateLocationOrder}
+                        createNewElement={createLocationAndUpdateChapter}
                     />
                 </div>
                 <div className="Chapter-contentContainer">

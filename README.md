@@ -1,7 +1,8 @@
 ##TODO
-- Legg inn typescript
-- Lag enkle eksempler på data
-- Fiks prettier og typescript: https://github.com/prettier/prettier/issues/6272
+- Hvordan kan jeg få oppdatert data etter jeg lager en location?
+- Forbedre oppdatering av data
+- Legge til karakterer og lokasjoner på et kapittel
+- Enkelt legge til nye kapitler
 
 
 # Getting Started with Create React App

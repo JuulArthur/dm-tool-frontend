@@ -8,6 +8,7 @@ const LocationCard = ({ location }: LocationPropType) => {
     return (
         <Card>
             <h1>{location.name}</h1>
+            <p>{location.description}</p>
             <p>{location.info}</p>
         </Card>
     );

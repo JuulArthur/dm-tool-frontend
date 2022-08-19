@@ -24,7 +24,6 @@ export const getChapter = ({ id }: { id: string | undefined }) => {
 };
 
 export const updateChapter = ({ id, title, description }: { id: string; title?: string; description?: string }) => {
-    console.log('I am ready to update', id, description, title);
     return (dispatch: any) => {
         return fetchJSON({ url: '/chapter/1', method: 'PATCH', body: { id, title, description } })
             .then((result) => {

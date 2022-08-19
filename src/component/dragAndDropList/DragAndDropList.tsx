@@ -10,12 +10,18 @@ interface DragAndDropListProps {
     elementCreator: (item: any) => JSX.Element;
     keyPrefix: string;
     saveOrder: (order: any) => void;
+    createNewElement?: () => void;
 }
 
-const DragAndDropList = ({ items, elementCreator, keyPrefix, saveOrder }: DragAndDropListProps) => {
+const DragAndDropList = ({ items, elementCreator, keyPrefix, saveOrder, createNewElement }: DragAndDropListProps) => {
     const [itemsCopy, setItemsCopy] = useState([...items]);
     useEffect(() => {
-        setItemsCopy(itemsCopy.sort((a: any, b: any) => a.order - b.order));
+        if (items.length !== itemsCopy.length) {
+            const tempItemList = [...items];
+            setItemsCopy(tempItemList.sort((a: any, b: any) => a.order - b.order));
+        } else {
+            setItemsCopy(itemsCopy.sort((a: any, b: any) => a.order - b.order));
+        }
     }, [items]);
 
     const moveListItem = useCallback(
@@ -42,7 +48,7 @@ const DragAndDropList = ({ items, elementCreator, keyPrefix, saveOrder }: DragAn
                 {itemsCopy.map((item, index) => {
                     return (
                         <DragAndDropItem
-                            key={keyPrefix + item?.id}
+                            key={keyPrefix + item.id}
                             // @ts-ignore
                             index={index}
                             moveListItem={moveListItem}
@@ -52,6 +58,13 @@ const DragAndDropList = ({ items, elementCreator, keyPrefix, saveOrder }: DragAn
                         </DragAndDropItem>
                     );
                 })}
+                <button
+                    onClick={() => {
+                        createNewElement && createNewElement();
+                    }}
+                >
+                    Create new element
+                </button>
             </div>
         </DndProvider>
     );
